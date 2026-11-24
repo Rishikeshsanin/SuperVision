@@ -1,0 +1,4 @@
+export function fit(sw,sh,w,h){if(!sw||!sh||!w||!h)return {scale:0,x:0,y:0};const scale=Math.min(w/sw,h/sh);return {scale,x:(w-sw*scale)/2,y:(h-sh*scale)/2};}
+export function iou(a,b){const x=Math.max(a[0],b[0]),y=Math.max(a[1],b[1]),r=Math.min(a[0]+a[2],b[0]+b[2]),d=Math.min(a[1]+a[3],b[1]+b[3]);const i=Math.max(0,r-x)*Math.max(0,d-y);return i/(a[2]*a[3]+b[2]*b[3]-i||1);}
+export function associate(old, detections, nextId){const used=new Set();const tracks=detections.map(p=>{let best=null,score=.25;for(const t of old){if(used.has(t.id)||t.class!==p.class)continue;const v=iou(t.bbox,p.bbox);if(v>score){best=t;score=v;}}if(best)used.add(best.id);return {...p,id:best?.id??nextId++,bbox:best?p.bbox.map((v,i)=>.72*v+.28*best.bbox[i]):p.bbox};});return {tracks,nextId};}
+export function direction(alpha){if(!Number.isFinite(alpha))return '—';return ['N','NE','E','SE','S','SW','W','NW'][Math.round(((alpha%360+360)%360)/45)%8];}

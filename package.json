@@ -1,0 +1,9 @@
+{
+  "name": "supervision",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check public/app.js && node --check public/vision.mjs"
+  }
+}
